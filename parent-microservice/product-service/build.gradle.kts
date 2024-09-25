@@ -9,7 +9,7 @@ version = "0.0.1-SNAPSHOT"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(22)
+        languageVersion = JavaLanguageVersion.of(20)
     }
 }
 
@@ -35,6 +35,7 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mongodb")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation(kotlin("script-runtime"))
 }
 
 tasks.withType<Test> {
