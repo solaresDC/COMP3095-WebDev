@@ -1,9 +1,7 @@
-package service;
+package ca.gbc.productservice.service;
 
-import dto.ProductRequest;
-import dto.ProductResponse;
-import model.Product;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import ca.gbc.productservice.dto.ProductRequest;
+import ca.gbc.productservice.dto.ProductResponse;
 
 import java.util.List;
 

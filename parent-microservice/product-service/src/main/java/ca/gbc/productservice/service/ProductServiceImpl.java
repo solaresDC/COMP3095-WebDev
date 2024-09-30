@@ -1,15 +1,14 @@
-package service;
+package ca.gbc.productservice.service;
 
-import dto.ProductRequest;
-import dto.ProductResponse;
+import ca.gbc.productservice.repository.ProductRepository;
+import ca.gbc.productservice.dto.ProductRequest;
+import ca.gbc.productservice.dto.ProductResponse;
 import lombok.RequiredArgsConstructor;
-import model.Product;
+import ca.gbc.productservice.model.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
-import repository.ProductRepository;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.List;

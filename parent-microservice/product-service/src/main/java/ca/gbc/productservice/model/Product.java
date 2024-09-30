@@ -1,4 +1,4 @@
-package model;
+package ca.gbc.productservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
