@@ -6,6 +6,7 @@ import ca.gbc.productservice.dto.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ca.gbc.productservice.service.ProductService;
@@ -20,8 +21,16 @@ public class ProductController {
     private final ProductService productService;
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createProduct(@RequestBody ProductRequest productRequest){
-        productService.createProduct(productRequest);
+    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest){
+        ProductResponse createProduct = productService.createProduct(productRequest);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/api/product/" + createProduct.id());
+        return  ResponseEntity
+                .status(HttpStatus.CREATED)
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(createProduct);
     }
     @GetMapping
     @ResponseStatus(HttpStatus.OK)

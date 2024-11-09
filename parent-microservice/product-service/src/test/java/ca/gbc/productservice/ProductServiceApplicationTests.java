@@ -24,7 +24,7 @@ class ProductServiceApplicationTests {
     //http://localhost:port/api/product      // my case port 8070
     @BeforeEach
     void setup(){
-            RestAssured.baseURI = "http://loclhost";
+            RestAssured.baseURI = "http://localhost";
             RestAssured.port = port ;
     }
 
@@ -37,12 +37,13 @@ class ProductServiceApplicationTests {
                     {
                     "name" : "Samsung TV",
                     "description" : "Samsung TV - Model 2024",
-                    "price" : "2000";
+                    "price" : 2000
                     }
                     """;
+
             //BDD -0 Behavioural Driven  Development(Given, when, then)
         RestAssured.given()
-                .contentType("application/JSON")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .post("/api/product")
@@ -53,20 +54,23 @@ class ProductServiceApplicationTests {
                 .body("name",Matchers.equalTo("Samsung TV"))
                 .body("description",Matchers.equalTo( "Samsung TV - Model 2024"))
                 .body("price",Matchers.equalTo(2000));
+
+
     }
+
     @Test
-    void getAllProductsTest(){
+    void getProductsTest(){
 
         String requestBody = """
                     {
                     "name" : "Samsung TV",
                     "description" : "Samsung TV - Model 2024",
-                    "price" : "2000";
+                    "price" : 2000
                     }
                     """;
         //BDD -0 Behavioural Driven  Development(Given, when, then)
         RestAssured.given()
-                .contentType("application/JSON")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .post("/api/product")
@@ -79,7 +83,7 @@ class ProductServiceApplicationTests {
                 .body("price",Matchers.equalTo(2000));
 
         RestAssured.given()
-                .contentType("application/JSON")
+                .contentType("application/json")
                 .when()
                 .get("/api/product")
                 .then()
@@ -87,8 +91,8 @@ class ProductServiceApplicationTests {
                 .statusCode(200)
                 .body("size()",Matchers.greaterThan(0))
                 .body("[0].name",Matchers.equalTo("Samsung TV"))
-                .body("[1].description",Matchers.equalTo( "Samsung TV - Model 2024"))
-                .body("[2].price",Matchers.equalTo(2000));
+                .body("[0].description",Matchers.equalTo( "Samsung TV - Model 2024"))
+                .body("[0].price",Matchers.equalTo(2000));
 
 
     }
