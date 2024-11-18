@@ -39,6 +39,13 @@ dependencies {
     testImplementation("io.rest-assured:rest-assured")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation(kotlin("script-runtime"))
+
+    //week 11
+
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+    testImplementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.0")
+
+
 }
 
 tasks.withType<Test> {
