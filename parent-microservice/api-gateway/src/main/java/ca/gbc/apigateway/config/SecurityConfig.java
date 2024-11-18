@@ -34,7 +34,7 @@ public class SecurityConfig {
         //        .authorizeHttpRequests(authorize -> authorize
         //                .anyRequest().authenticated())  //all request temporarily permitted -> get around autentification
 
-                //ypu can only choose one either auth... up or auth... down
+                //you can only choose one either auth... up or auth... down
 
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(noauthResourcesUris)
