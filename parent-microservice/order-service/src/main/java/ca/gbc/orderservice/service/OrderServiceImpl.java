@@ -7,20 +7,23 @@ import ca.gbc.orderservice.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import java.util.UUID;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
 
 
     private final OrderRepository orderRepository;
 
     private final InventoryClient inventoryClient;
+
     @Override
     public void placeOrder(OrderRequest orderRequest) {
 

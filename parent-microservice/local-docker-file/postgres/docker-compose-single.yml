@@ -12,7 +12,7 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password
     volumes: #mount (Also refered as map) a specific directory
-        - ./data/order:/var/lib/postgresql/data-d
+        - ./data/order:/var/lib/postgresql/data
         - ./init/order/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   pgadmin:   #container 1  # dependant on container mongodb

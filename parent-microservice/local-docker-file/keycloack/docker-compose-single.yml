@@ -1,5 +1,6 @@
 version: '3.9'
 
+
 services:
   # the order of the containers doesn't really matter
 
@@ -20,12 +21,18 @@ services:
       JBOSS_LOG_MANAGER_ROOT_LOGGER: DEBUG, stdout, FILE
     ports:
       - "8089:8080"
+    volumes:
+      - ./realms/:/opt/keycloak/data/import
+    depends_on:
+      - postgres-keycloak
+    networks:
+      - spring
 
   postgres-keycloak:   #container 1  # dependant on container mongodb
     image: postgres
     ports:
       - "5430:5432"
-    container_name: postgres-single  #container name HAS! to be unique when they are inside the same solution
+    container_name: postgres-keycloak  #container name HAS! to be unique when they are inside the same solution
     environment:
       - POSTGRES_DB=keycloak
       - POSTGRES_USER=admin

@@ -36,7 +36,7 @@ dependencies {
 	implementation("org.flywaydb:flyway-core")
 	implementation("org.flywaydb:flyway-database-postgresql")
 	//Week 10 - added extra implementation dependencies
-	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+	//implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 	implementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner") // for testing
 	//Week 10
 	compileOnly("org.projectlombok:lombok")

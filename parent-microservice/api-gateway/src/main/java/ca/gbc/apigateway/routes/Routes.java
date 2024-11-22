@@ -6,13 +6,18 @@ import org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctio
 import org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.function.*;
+import org.springframework.web.servlet.function.RequestPredicates;
+import org.springframework.web.servlet.function.RouterFunction;
+import org.springframework.web.servlet.function.ServerResponse;
 
+import static org.springframework.cloud.gateway.server.mvc.filter.FilterFunctions.setPath;
+//daniel
 @Slf4j //to allow log in
 @Configuration
 public class Routes {
 
-    @Value("${services.product.url}")//inject properties
+    //inject properties
+    @Value("${services.product.url}")
     private String productServiceUrl;
 
     @Value("${services.order.url}")
@@ -22,24 +27,39 @@ public class Routes {
     private String inventoryServiceUrl;
 
     @Bean //configuration class files contain
-    public RouterFunction<ServerResponse> productServiceRoute(){
-
-        log.info("Initializing product service route with URL: {}",productServiceUrl);
+    public RouterFunction<ServerResponse> productServiceRoute() {
+        log.info("Initializing product-service route with URL: {}", productServiceUrl);
 
         return GatewayRouterFunctions.route("product_service")
-                .route(RequestPredicates.path("/api/product"), request ->{
-                    log.info("Received request for product service: {}", request.uri());
-                    try{
+                .route(RequestPredicates.path("/api/product"), request -> {
+
+                    log.info("Received request for product-service: {}", request.uri());
+
+                    try {
                         ServerResponse response = HandlerFunctions.http(productServiceUrl).handle(request);
-                        log.info("Response status: {}",response.statusCode());
+                        log.info("Response status: {}", response.statusCode());
                         return response;
-                    }catch(Exception e){
-                        log.error("Error occurred while routing request: {}", e.getMessage(),e);
-                        return ServerResponse.status(500).body("An error occurred routing");
+                    } catch (Exception e) {
+                        log.error("Error occurred while routing to: {}", e.getMessage(), e);
+                        return ServerResponse.status(500).body("Error occurred when routing to product-service");
+                    }
+                })
+                .route(RequestPredicates.path("/api/product/{productid}"), request -> {
+
+                    log.info("Received request for product-service: {}", request.uri());
+
+                    try {
+                        ServerResponse response = HandlerFunctions.http(productServiceUrl).handle(request);
+                        log.info("Response status: {}", response.statusCode());
+                        return response;
+                    } catch (Exception e) {
+                        log.error("Error occurred while routing to: {}", e.getMessage(), e);
+                        return ServerResponse.status(500).body("Error occurred when routing to product-service");
                     }
                 })
                 .build();
     }
+
 
     @Bean
     public RouterFunction<ServerResponse> orderServiceRoute(){
@@ -66,7 +86,7 @@ public class Routes {
 
         return GatewayRouterFunctions.route("inventory_service")
                 .route(RequestPredicates.path("/api/inventory"), request ->{
-                    log.info("Received request for order service: {}", request.uri());
+                    log.info("Received request for inventory service: {}", request.uri());
                     try{
                         ServerResponse response = HandlerFunctions.http(inventoryServiceUrl).handle(request);
                         log.info("Response status: {}",response.statusCode());
@@ -85,7 +105,7 @@ public class Routes {
 
         return GatewayRouterFunctions.route("product_service_swagger")
                 .route(RequestPredicates.path("/aggregate/product-service/v3/api-docs"),
-                        HandlerFunctions.http("http://localhost:8084"))
+                        HandlerFunctions.http(productServiceUrl))
                 .filter(setPath("/api-docs"))
                 .build();
     }
@@ -95,9 +115,9 @@ public class Routes {
     @Bean
     public RouterFunction<ServerResponse> orderServiceSwaggerRoute(){
 
-        return GatewayRouterFunctions.route("product_service_swagger")
+        return GatewayRouterFunctions.route("order_service_swagger")
                 .route(RequestPredicates.path("/aggregate/order-service/v3/api-docs"),
-                        HandlerFunctions.http("http://localhost:8082"))
+                        HandlerFunctions.http(orderServiceUrl))
                 .filter(setPath("/api-docs"))
                 .build();
     }
@@ -106,9 +126,9 @@ public class Routes {
     @Bean
     public RouterFunction<ServerResponse> inventoryServiceSwaggerRoute(){
 
-        return GatewayRouterFunctions.route("product_service_swagger")
+        return GatewayRouterFunctions.route("inventory_service_swagger")
                 .route(RequestPredicates.path("/aggregate/inventory-service/v3/api-docs"),
-                        HandlerFunctions.http("http://localhost:8083"))
+                        HandlerFunctions.http(inventoryServiceUrl))
                 .filter(setPath("/api-docs"))
                 .build();
     }

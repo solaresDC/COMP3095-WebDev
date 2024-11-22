@@ -3,11 +3,11 @@ version: '3.9'
 services:
   # the order of the containers doesn't really matter
 
-  postgres:   #container 1  # dependant on container mongodb
+  postgres-inventory:   #container 1  # dependant on container mongodb
     image: postgres
     ports:
       - "5433:5432"
-    container_name: postgres-single-2  #container name HAS! to be unique when they are inside the same solution
+    container_name: postgres-inventory-local  #container name HAS! to be unique when they are inside the same solution
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password
@@ -17,23 +17,25 @@ services:
       - ./init/inventory/init.sql:/docker-entrypoint-initdb.d/init.sql
 
 
-#  postgres:   #container 1  # dependant on container mongodb
-#    image: postgres
-#    ports:
-#      - "5432:5432"
-#    container_name: postgres-single  #container name HAS! to be unique when they are inside the same solution
-#    environment:
-#      - POSTGRES_USER=admin
-#      - POSTGRES_PASSWORD=password
-#    volumes: #mount (Also refered as map) a specific directory
-#        - ./data/order:/var/lib/postgresql/data
-#        - ./init/order/init.sql:/docker-entrypoint-initdb.d/init.sql
+  postgres-order:   #container 1  # dependant on container mongodb
+    image: postgres
+    ports:
+      - "5432:5432"
+    container_name: postgres-order-local  #container name HAS! to be unique when they are inside the same solution
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+    volumes: #mount (Also refered as map) a specific directory
+        - ./data/order:/var/lib/postgresql/data
+        - ./init/order/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+
 
   pgadmin:   #container 1  # dependant on container mongodb
     image: dpage/pgadmin4
     ports:
       - "8881:80"
-    container_name: pgadmin-single-2  #container name HAS! to be unique when they are inside the same solution
+    container_name: pgadmin-inventory  #container name HAS! to be unique when they are inside the same solution
     environment:
           - PGADMIN_DEFAULT_EMAIL=user@domain.ca
           - PGADMIN_DEFAULT_PASSWORD=password
