@@ -1,6 +1,6 @@
-#-----------------
-# Build Stage
-#-----------------
+#-------------------
+# BUILD STAGE:
+#-------------------
 
 FROM gradle:8-jdk23-alpine AS builder
 
@@ -10,19 +10,20 @@ WORKDIR /home/gradle/src
 
 RUN gradle build -x test
 
-#-----------------------
-# Package Stage
-#-----------------------
+#-------------------
+# PACKAGE STAGE:
+#-------------------
 
 FROM openjdk:23-jdk
 
 RUN mkdir /app
 
+# untill here every micro service can have same code for Dockerfile but next line will change ( the name of jar file)
 COPY --from=builder /home/gradle/src/build/libs/*.jar /app/product-service.jar
 
 ENV MONGO_DB_USERNAME=admin \
-    MONGO_DB_PWD=password
+    MONGO_DB_PASSWORD=password
 
-EXPOSE 8074
-
+EXPOSE 8082
+# Change here as well !
 ENTRYPOINT ["java","-jar","/app/product-service.jar"]

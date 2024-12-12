@@ -1,58 +1,31 @@
-# ------------------------------------------------------------------------------------------
-# commands
-#
-# 1.- docker-compose -p comp3095-microservices-ecommerce -f docker-compose-single.yml up -d
-#     -- This command will start the containers in detached mode without rebuilding the images (if they exist)
-#
-#2.- docker-compose -p comp3095-microservices-ecommerce -f docker-compose-single.yml up -d  --build
-#    -- this command force the rebuild of all images, even if they already exist, before starting the containers
-# ------------------------------------------------------------------------------------------
 
-#version: '3.9'
+version: '3.9'
 
 services:
-  # the order of the containers doesn't really matter
 
-#  product-sevice:   #container 1  # dependant on container mongodb
-#    image: product-service
-#    ports:
-#      - "8074:8074"
-#    build:
-#      context: ./product-service      #THE DIRECTORY WHERE THE DOCKER FILE RESIDES
-#      dockerfile: ./Dockerfile        #Specify the dockerfile for use to build image
-#    container_name: product-service  #container name HAS! to be unique when they are inside the same solution
-#    environment:   #Environment variables
-#      SPRING_PROFILES_ACTIVE: docker   #application-docker.properties file
-#    depends_on:
-#      - mongodb
-#    networks:
-#      - spring #this is just a name , a name for the network , you can call it whatever
-
-  mongodb:  #container 2
-    image: mongo:latest
-    container_name: mongodb-local
+  mongodb:
+    image: mongo:latest # put the version which you want to use
+    container_name: mongodb
     ports:
-      - "27019:27017"
+      - "27017:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=password
-    volumes: #mount (Also refered as map) a specific directory
-      - ./data/:/data/db
-      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-        # restart: unless-stopped  # this is optional and the usage depends if you want them
-      # to automatically always be running
-    command: mongod --auth #authorisation  #mongod -auth
+    volumes:
+      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - ./db-data:/data/db
+
 
   mongo-express:
-    image: mongo-express:latest
+    image: mongo-express
     ports:
-      - "8079:8081"
+      - "8081:8081"
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
       - ME_CONFIG_MONGODB_ADMINPASSWORD=password
-      - ME_CONFIG_MONGODB_SERVER=mongodb-local #connect to mongo-express to the mongodb container by name
-    container_name: external_mongo-express
-    restart: unless-stopped
+      - ME_CONFIG_MONGODB_SERVER=mongodb
     depends_on:
       - mongodb
+    container_name: mongo-expresss
+
 

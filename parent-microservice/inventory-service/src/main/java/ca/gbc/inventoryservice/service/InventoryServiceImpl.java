@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class InventoryServiceImpl implements InventoryService {
 
-        private final InventoryRepo inventoryRepo;
+    private final InventoryRepo inventoryRepo;
 
     @Override
     public boolean isInStock(String skuCode, Integer quantity) {

@@ -48,6 +48,6 @@ class InventoryServiceApplicationTests {
 				.then()
 				.log().all()
 				.statusCode(200)
-				.body(equalTo("true"));  // Adjust based on your expected response (true or false)
+				.body(equalTo("true"));  // Adjust based on your expected response (true or false)
 	}
 }

@@ -1,45 +1,31 @@
+
 version: '3.9'
 
 services:
-  # the order of the containers doesn't really matter
 
-  postgres-inventory:   #container 1  # dependant on container mongodb
-    image: postgres
+  mongodb:
+    image: mongo:latest # put the version which you want to use
+    container_name: mongodb
     ports:
-      - "5433:5432"
-    container_name: postgres-inventory-local  #container name HAS! to be unique when they are inside the same solution
+      - "27017:27017"
     environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=inventory-service
-    volumes: #mount (Also refered as map) a specific directory
-      - ./data/inventory:/var/lib/postgresql/data
-      - ./init/inventory/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - ./db-data:/data/db
 
 
-  postgres-order:   #container 1  # dependant on container mongodb
-    image: postgres
+  mongo-express:
+    image: mongo-express
     ports:
-      - "5432:5432"
-    container_name: postgres-order-local  #container name HAS! to be unique when they are inside the same solution
+      - "8081:8081"
     environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=password
-    volumes: #mount (Also refered as map) a specific directory
-        - ./data/order:/var/lib/postgresql/data
-        - ./init/order/init.sql:/docker-entrypoint-initdb.d/init.sql
-
-
-
-  pgadmin:   #container 1  # dependant on container mongodb
-    image: dpage/pgadmin4
-    ports:
-      - "8881:80"
-    container_name: pgadmin-inventory  #container name HAS! to be unique when they are inside the same solution
-    environment:
-          - PGADMIN_DEFAULT_EMAIL=user@domain.ca
-          - PGADMIN_DEFAULT_PASSWORD=password
-
-
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    depends_on:
+      - mongodb
+    container_name: mongo-expresss
 
 
